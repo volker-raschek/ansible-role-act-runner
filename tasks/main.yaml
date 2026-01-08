@@ -61,10 +61,9 @@
 
 - name: Register act_runner
   ansible.builtin.command:
-    cmd: "act_runner --config {{ act_runner_config_file }} register --instance {{ act_runner_gitea_url }} --no-interactive"
+    cmd: "act_runner --config {{ act_runner_config_file }} register --instance {{ act_runner_gitea_url }} --no-interactive --token={{ act_runner_token }}"
     chdir: "{{ act_runner_lib_dir }}"
-  environment:
-    GITEA_RUNNER_REGISTRATION_TOKEN: "{{ act_runner_token }}"
+  no_log: true
   register: _act_runner_register_cmd
   failed_when: _act_runner_register_cmd.rc > 0
   changed_when: _act_runner_register_cmd.rc == 0
