@@ -1,0 +1,82 @@
+## @section Act Runner
+
+## @param act_runner_config_file Path to the act_runner configuration file
+act_runner_config_file: /etc/act_runner/config.yaml
+
+act_runner_config:
+  log:
+    ## @param act_runner_config.log.level The level of logging, can be trace, debug, info, warn, error, fatal
+    level: info
+
+  runner:
+    ## @param act_runner_config.runner.file Where to store the registration result
+    file: .runner
+    ## @param act_runner_config.runner.capacity Execute how many tasks concurrently at the same time
+    capacity: 1
+    ## @param act_runner_config.runner.envs Extra environment variables to run jobs
+    envs: {}
+    #  A_TEST_ENV_NAME_1: a_test_env_value_1
+    #  A_TEST_ENV_NAME_2: a_test_env_value_2
+    ## @param act_runner_config.runner.env_file Extra environment variables to run jobs from a file
+    env_file: .env
+    ## @param act_runner_config.runner.timeout The timeout for a job to be finished
+    timeout: 3h
+    ## @param act_runner_config.runner.shutdown_timeout The timeout for the runner to wait for running jobs to finish when shutting down
+    shutdown_timeout: 0s
+    ## @param act_runner_config.runner.insecure Whether skip verifying the TLS certificate of the Gitea instance
+    insecure: false
+    ## @param act_runner_config.runner.fetch_timeout The timeout for fetching the job from the Gitea instance
+    fetch_timeout: 5s
+    ## @param act_runner_config.runner.fetch_interval The interval for fetching the job from the Gitea instance
+    fetch_interval: 2s
+    ## @param act_runner_config.runner.github_mirror The mirror address of the github that pulls the action repository
+    github_mirror: ''
+    ## @param act_runner_config.runner.labels The labels of a runner are used to determine which jobs the runner can run
+    labels:
+    - "ubuntu-latest:docker://docker.gitea.com/runner-images:ubuntu-latest"
+    - "ubuntu-22.04:docker://docker.gitea.com/runner-images:ubuntu-22.04"
+    - "ubuntu-20.04:docker://docker.gitea.com/runner-images:ubuntu-20.04"
+
+  cache:
+    ## @param act_runner_config.cache.enabled Enable cache server to use actions/cache
+    enabled: true
+    ## @param act_runner_config.cache.dir The directory to store the cache data
+    dir: ""
+    ## @param act_runner_config.cache.host The host of the cache server
+    host: ""
+    ## @param act_runner_config.cache.port The port of the cache server
+    port: 0
+    ## @param act_runner_config.cache.external_server The external cache server URL
+    external_server: ""
+
+  container:
+    ## @param act_runner_config.container.network Specifies the network to which the container will connect
+    network: ""
+    ## @param act_runner_config.container.privileged Whether to use privileged mode when launching task containers
+    privileged: false
+    ## @param act_runner_config.container.options Other options to be used when the container is started
+    options:
+    ## @param act_runner_config.container.workdir_parent The parent directory of a job's working directory
+    workdir_parent:
+    ## @param act_runner_config.container.valid_volumes Volumes that can be mounted to containers
+    valid_volumes: []
+    ## @param act_runner_config.container.docker_host Overrides the docker client host with the specified one
+    docker_host: ""
+    ## @param act_runner_config.container.force_pull Pull docker image(s) even if already present
+    force_pull: true
+    ## @param act_runner_config.container.force_rebuild Rebuild docker image(s) even if already present
+    force_rebuild: false
+    ## @param act_runner_config.container.require_docker Always require a reachable docker daemon
+    require_docker: false
+    ## @param act_runner_config.container.docker_timeout Timeout to wait for the docker daemon to be reachable
+    docker_timeout: 0s
+
+  host:
+    ## @param act_runner_config.host.workdir_parent The parent directory of a job's working directory
+    workdir_parent:
+
+## @param act_runner_gitea_url The URL of the Gitea instance
+act_runner_gitea_url: ""
+
+## @param act_runner_token The registration token for the act_runner
+act_runner_token: ""

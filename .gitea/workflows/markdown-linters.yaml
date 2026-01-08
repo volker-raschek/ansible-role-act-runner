@@ -1,0 +1,18 @@
+name: Lint Markdown files
+
+on:
+  pull_request:
+    types: [ "opened", "reopened", "synchronize" ]
+  push:
+    branches: [ '**' ]
+    tags-ignore: [ '**' ]
+
+jobs:
+  markdown-lint:
+    runs-on:
+    - ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6.0.1
+    - uses: DavidAnson/markdownlint-cli2-action@v21.0.0
+      with:
+        globs: '**/*.md'

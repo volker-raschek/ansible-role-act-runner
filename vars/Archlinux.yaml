@@ -1,0 +1,11 @@
+---
+
+act_runner_package_names:
+- act_runner
+
+act_runner_service_name: act_runner
+
+act_runner_unix_user: act_runner
+act_runner_unix_group: act_runner
+
+act_runner_lib_dir: /var/lib/act_runner

@@ -1,0 +1,77 @@
+---
+
+- name: Include OS-specific variables
+  ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+      - "{{ ansible_facts['distribution'] }}_{{ ansible_facts['architecture'] }}.yaml"
+      - "{{ ansible_facts['distribution'] }}.yaml"
+      - "{{ ansible_facts['os_family'] }}_{{ ansible_facts['architecture'] }}.yaml"
+      - "{{ ansible_facts['os_family'] }}.yaml"
+      - main.yaml
+      paths:
+      - vars
+
+- name: Verify required variables
+  ansible.builtin.include_tasks: verify_vars.yaml
+
+- name: Check Gitea instance availability
+  ansible.builtin.uri:
+    url: "{{ act_runner_gitea_url }}"
+    method: GET
+    validate_certs: false
+    timeout: 10
+  register: _gitea_check
+  failed_when: _gitea_check.status is not defined or _gitea_check.status >= 400
+
+- name: Install act_runner and dependencies
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ act_runner_package_names }}"
+
+- name: Create act_runner config directory
+  ansible.builtin.file:
+    path: "{{ act_runner_config_file | dirname }}"
+    state: directory
+    mode: "0755"
+
+- name: Template act_runner config file
+  ansible.builtin.template:
+    src: etc/act_runner/config.yaml.j2
+    dest: "{{ act_runner_config_file }}"
+    owner: "{{ act_runner_unix_user }}"
+    group: "{{ act_runner_unix_group }}"
+    mode: "0644"
+  notify: Restart act_runner
+
+- name: Create act_runner lib directory
+  ansible.builtin.file:
+    path: "{{ act_runner_lib_dir }}"
+    owner: "{{ act_runner_unix_user }}"
+    group: "{{ act_runner_unix_group }}"
+    mode: "0755"
+    state: directory
+
+- name: Check if act_runner is already registered
+  ansible.builtin.stat:
+    path: "{{ act_runner_lib_dir }}/.runner"
+  register: _act_runner_registration_file
+
+- name: Register act_runner
+  ansible.builtin.command:
+    cmd: "act_runner --config {{ act_runner_config_file }} register --instance {{ act_runner_gitea_url }} --no-interactive"
+    chdir: "{{ act_runner_lib_dir }}"
+  environment:
+    GITEA_RUNNER_REGISTRATION_TOKEN: "{{ act_runner_token }}"
+  register: _act_runner_register_cmd
+  failed_when: _act_runner_register_cmd.rc > 0
+  changed_when: _act_runner_register_cmd.rc == 0
+  when: not _act_runner_registration_file.stat.exists
+
+- name: Start and enable act_runner service
+  ansible.builtin.service:
+    name: "{{ act_runner_service_name }}"
+    state: started
+    enabled: true

@@ -1,0 +1,21 @@
+name: Release Ansible Role
+
+on:
+  push:
+    tags:
+    - '**'
+
+jobs:
+  release:
+    name: Release Ansible Role
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install Ansible Galaxy
+      run: |
+        apt update --yes
+        apt install --yes ansible
+    - env:
+        ANSIBLE_GALAXY_TOKEN: ${{ secrets.ANSIBLE_GALAXY_TOKEN }}
+      name: Update Ansible Role in Ansible Galaxy
+      run: |
+        ansible-galaxy role import --token=${ANSIBLE_GALAXY_TOKEN} volker-raschek ${GITHUB_REPOSITORY#*/}

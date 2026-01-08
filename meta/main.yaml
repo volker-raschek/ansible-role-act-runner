@@ -1,0 +1,26 @@
+dependencies: []
+galaxy_info:
+  author: "Markus Pesch"
+  company: "Cryptic Systems"
+  description: "Role to create and managed an existing PKI infrastructure"
+  galaxy_tags:
+  - ca
+  - ssl
+  - tls
+  license: "MIT"
+  min_ansible_version: "2.9"
+  namespace: volker-raschek
+  platforms:
+  - name: ArchLinux
+    versions:
+    - all
+  - name: EL
+    versions:
+    - all
+  - name: Fedora
+    versions:
+    - all
+  - name: Ubuntu
+    versions:
+    - all
+  role_name: "act_runner"
