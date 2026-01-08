@@ -80,3 +80,8 @@ act_runner_gitea_url: ""
 
 ## @param act_runner_token The registration token for the act_runner
 act_runner_token: ""
+
+## @section Package Management
+
+## @param act_runner_update_cache Whether to update package cache before installing packages
+act_runner_update_cache: true

@@ -26,10 +26,17 @@
   failed_when: _gitea_check.status is not defined or _gitea_check.status >= 400
 
 - name: Install act_runner and dependencies
-  ansible.builtin.package:
-    name: "{{ item }}"
-    state: present
-  with_items: "{{ act_runner_package_names }}"
+  when:
+  - ansible_facts['distribution'] == 'Archlinux'
+  block:
+  - name: Update package cache
+    community.general.pacman:
+      update_cache: "{{ act_runner_update_cache }}"
+  - name: Install packages
+    ansible.builtin.package:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ act_runner_package_names }}"
 
 - name: Create act_runner config directory
   ansible.builtin.file:
