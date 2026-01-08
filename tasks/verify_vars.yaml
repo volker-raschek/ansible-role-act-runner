@@ -3,9 +3,9 @@
 - name: Verify required variables are defined
   ansible.builtin.assert:
     that:
-    - vars[item] is defined
-    - vars[item] | length > 0
+    - lookup('vars', item) is defined
+    - lookup('vars', item) | length > 0
     fail_msg: "Required variable '{{ item }}' is not defined or empty."
-  with_items:
+  loop:
   - act_runner_gitea_url
   - act_runner_token

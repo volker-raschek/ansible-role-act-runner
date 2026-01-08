@@ -9,8 +9,7 @@ on:
 
 jobs:
   ansible-lint:
-    runs-on:
-    - ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6.0.1
     - name: Run ansible-lint
