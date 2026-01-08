@@ -2,11 +2,14 @@ dependencies: []
 galaxy_info:
   author: "Markus Pesch"
   company: "Cryptic Systems"
-  description: "Role to create and managed an existing PKI infrastructure"
+  description: "Ansible role to install and configure gitea Act Runner for executing GitHub Actions-compatible workflows"
   galaxy_tags:
-  - ca
-  - ssl
-  - tls
+  - gitea
+  - runner
+  - actions
+  - ci
+  - cd
+  - automation
   license: "MIT"
   min_ansible_version: "2.9"
   namespace: volker-raschek
